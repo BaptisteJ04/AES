@@ -1,0 +1,44 @@
+""
+"addMod2"
+addMod2 (Z2Z 0) (Z2Z 0)
+--Z2Z 0
+addMod2 (Z2Z 1) (Z2Z 0)
+--Z2Z 1
+addMod2 (Z2Z 1) (Z2Z 1)
+--Z2Z 0
+addMod2 (Z2Z 0) (Z2Z 1)
+--Z2Z 1
+
+""
+"multMod2"
+multMod2 (Z2Z 0) (Z2Z 0)
+--Z2Z 0
+multMod2 (Z2Z 1) (Z2Z 0)
+--Z2Z 0
+multMod2 (Z2Z 1) (Z2Z 1)
+--Z2Z 1
+multMod2 (Z2Z 0) (Z2Z 1)
+--Z2Z 0
+
+""
+"inverseaddMod2"
+inverseaddMod2 (Z2Z 0) 
+--Z2Z 0
+inverseaddMod2 (Z2Z 1) 
+--Z2Z 1
+
+""
+"inversemultMod2"
+inversemultMod2 (Z2Z 1) 
+--Z2Z 1
+
+""
+"egalite_Z2Z"
+egalite_Z2Z (Z2Z 0) (Z2Z 0)
+--True
+egalite_Z2Z (Z2Z 1) (Z2Z 0)
+--False
+egalite_Z2Z (Z2Z 0) (Z2Z 1)
+--False
+egalite_Z2Z (Z2Z 1) (Z2Z 1)
+--True

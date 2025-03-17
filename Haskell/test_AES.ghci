@@ -1,0 +1,24 @@
+""
+"sub_bytes"
+bintohex(complete(sub_bytes_aux (hextobin "53")))
+bintohex(complete(sub_bytes_aux (hextobin "00")))
+bintohex(complete(inv_sub_bytes_aux (hextobin "ed")))
+bintohex(complete(inv_sub_bytes_aux (hextobin "45")))
+bintohex(complete(inv_sub_bytes_aux (hextobin "63")))
+
+""
+"shift rows"
+shift_rows (Blc  [  Col (Pol [Gf (Pol [Z2Z 1]),Gf (Pol [Z2Z 1]),Gf (Pol [Z2Z 1]),Gf (Pol [Z2Z 1])]) ,  Col (Pol [Gf (Pol [Z2Z 0]),Gf (Pol [Z2Z 0]),Gf (Pol [Z2Z 0]),Gf (Pol [Z2Z 0])]), Col (Pol [Gf (Pol [Z2Z 0]),Gf (Pol [Z2Z 0]),Gf (Pol [Z2Z 0]),Gf (Pol [Z2Z 1])])  ,  Col (Pol [Gf (Pol [Z2Z 1]),Gf (Pol [Z2Z 1]),Gf (Pol [Z2Z 1]),Gf (Pol [Z2Z 1])])] )
+
+""
+--"mix_col"
+--mix_col (Col (Pol [ Gf (Pol [Z2Z 1, Z2Z 0, Z2Z 0, Z2Z 1]), Gf (Pol [Z2Z 0, Z2Z 1, Z2Z 1, Z2Z 0]), Gf (Pol [Z2Z 1, Z2Z 1, Z2Z 0, Z2Z 1]), Gf (Pol [Z2Z 0, Z2Z 0, Z2Z 1, Z2Z 1]) ]))
+
+--"bhc"
+bloc_hextobin ( Blch [ ["1","2"],["ed"] ])
+
+lbloc_bintohex(key_schedule_192 (bloc_hextobin test_192))
+
+lbloc_bintohex(key_schedule_192 (bloc_hextobin test_192_2))
+
+lbloc_bintohex(key_schedule_256 (bloc_hextobin test_256))

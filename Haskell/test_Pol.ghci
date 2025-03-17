@@ -1,0 +1,125 @@
+"test adition"
+addPol (Pol [Z2Z 0]) (Pol [Z2Z 0])
+--[Z2Z 0]
+addPol (Pol [Z2Z 1,Z2Z 0,Z2Z 1]) (Pol [Z2Z 0,Z2Z 1,Z2Z 1,Z2Z 1])
+--[Z2Z 1,Z2Z 1,Z2Z 0,Z2Z 1]
+
+""
+"test multiplication"
+multPol (Pol [Z2Z 0]) (Pol [Z2Z 0])
+--[Z2Z 0]
+multPol (Pol [Z2Z 1,Z2Z 0,Z2Z 1]) (Pol [Z2Z 0,Z2Z 1,Z2Z 1,Z2Z 1])
+--Pol [Z2Z 0,Z2Z 1,Z2Z 1,Z2Z 0,Z2Z 1,Z2Z 1]
+
+
+""
+"test normalize_Pol"
+normalize_Pol (Pol [Z2Z 1,Z2Z 0,Z2Z 1])
+--Pol [Z2Z 1,Z2Z 0,Z2Z 1]
+normalize_Pol (Pol [Z2Z 1,Z2Z 0])
+--Pol [Z2Z 1]
+normalize_Pol (Pol [Z2Z 0])
+--Pol[]
+
+""
+"test inverse"
+inverseaddPol (Pol [Z2Z 0]) 
+--Pol [Z2Z 0]
+inverseaddPol (Pol [Z2Z 1,Z2Z 0,Z2Z 1]) 
+--Pol [Z2Z 1,Z2Z 0,Z2Z 1]
+
+""
+"test degre"
+degres_Pol (Pol [Z2Z 0])
+-- -1
+degres_Pol (Pol [Z2Z 1])
+-- 0
+degres_Pol (Pol [Z2Z 1,Z2Z 0,Z2Z 1])
+--2
+
+
+""
+"test creapol"
+crea_pol_m (Z2Z 1) 3
+-- --(Pol [Z2Z 0,Z2Z 0,Z2Z 0,Z2Z 1])
+crea_pol_m (Z2Z 1) 0
+-- --(Pol [Z2Z 0,Z2Z 0,Z2Z 0,Z2Z 1])
+
+""
+"test cut last"
+cut_last (Pol [R 4,R 6,R 3,R 1]) 
+--(Pol [R 4,R 6,R 3])
+cut_last (Pol [Z2Z 1]) 
+--(Pol [])
+
+""
+"test take last"
+take_last (Pol [R 4,R 6,R 3,R 1]) 
+--R 1
+
+""
+"egalite pol"
+egalite_pol (Pol [Z2Z 1,Z2Z 0,Z2Z 1]) (Pol [Z2Z 1,Z2Z 0,Z2Z 1])
+--True
+egalite_pol (Pol [Z2Z 1,Z2Z 1,Z2Z 1]) (Pol [Z2Z 1,Z2Z 0,Z2Z 1])
+--False
+egalite_pol (Pol [Z2Z 1,Z2Z 1,Z2Z 1]) (Pol [Z2Z 1,Z2Z 1])
+--False
+egalite_pol (Pol [Z2Z 1,Z2Z 1,Z2Z 1]) (Pol [Z2Z 0])
+--False
+egalite_pol (Pol [Z2Z 0]) (Pol [Z2Z 0])
+--True
+
+""
+"test division"
+division_pol (Pol [R 4,R 6,R 3,R 1]) (Pol [R 1,R 3,R 4])
+--Pol [0.56,0.25]
+
+division_pol (Pol [Z2Z 1,Z2Z 0,Z2Z 1]) (Pol [Z2Z 1,Z2Z 1,Z2Z 1])
+--Pol [Z2Z 1]
+
+""
+"test modulo"
+modulo_pol (Pol [R 4,R 6,R 3,R 1]) (Pol [R 1,R 3,R 4])
+--Pol [0.56,0.25]
+
+modulo_pol (Pol [Z2Z 1,Z2Z 0,Z2Z 1]) (Pol [Z2Z 1,Z2Z 1,Z2Z 1])
+--Pol [Z2Z 1]
+
+modulo_pol (Pol [Z2Z 1,Z2Z 0,Z2Z 0,Z2Z 1,Z2Z 1,Z2Z 1,Z2Z 1,Z2Z 0,Z2Z 1,Z2Z 1,Z2Z 0,Z2Z 1,Z2Z 0,Z2Z 1]) (Pol [Z2Z 1,Z2Z 1,Z2Z 0,Z2Z 1,Z2Z 1,Z2Z 0,Z2Z 0,Z2Z 0,Z2Z 1])
+--Pol [Z2Z 1,Z2Z 0,Z2Z 0,Z2Z 0,Z2Z 0,Z2Z 0,Z2Z 1,Z2Z 1]
+
+modulo_pol (Pol [Z2Z 1,Z2Z 0,Z2Z 0,Z2Z 1,Z2Z 1,Z2Z 1,Z2Z 1,Z2Z 0,Z2Z 1,Z2Z 1,Z2Z 0,Z2Z 1,Z2Z 0,Z2Z 1,Z2Z 0]) (Pol [Z2Z 1,Z2Z 1,Z2Z 0,Z2Z 1,Z2Z 1,Z2Z 0,Z2Z 0,Z2Z 0,Z2Z 1])
+--Pol [Z2Z 1,Z2Z 0,Z2Z 0,Z2Z 0,Z2Z 0,Z2Z 0,Z2Z 1,Z2Z 1]
+
+modulo_pol (Pol [Z2Z 1,Z2Z 0,Z2Z 0,Z2Z 1,Z2Z 1,Z2Z 1,Z2Z 1,Z2Z 0,Z2Z 1,Z2Z 1,Z2Z 0,Z2Z 1,Z2Z 0,Z2Z 1,Z2Z 0]) (Pol [Z2Z 1,Z2Z 1,Z2Z 0,Z2Z 1,Z2Z 1,Z2Z 0,Z2Z 0,Z2Z 0,Z2Z 1,Z2Z 0])
+--Pol [Z2Z 1,Z2Z 0,Z2Z 0,Z2Z 0,Z2Z 0,Z2Z 0,Z2Z 1,Z2Z 1]
+
+modulo_pol (Pol [Z2Z 1,Z2Z 0,Z2Z 1]) (Pol [])
+--Pol [Z2Z 1,Z2Z 0,Z2Z 1]
+
+modulo_pol (Pol []) (Pol [Z2Z 1,Z2Z 0,Z2Z 1]) 
+--Pol []
+
+""
+"addPolmodulo"
+addmodulo (Pol [Z2Z 1,Z2Z 0,Z2Z 1]) (Pol [Z2Z 0,Z2Z 1]) (Pol [Z2Z 0,Z2Z 1])
+--Pol [Z2Z 1]
+addmodulo (Pol [R 1,R 0,R 0,R 1,R 1,R 1,R 1 ,R 0,R 1 ,R 1 ,R 0,R 1 ,R 0,R 1]) (Pol [R 1,R 1,R 0,R 1,R 1,R 0,R 0 ,R 0,R 1]) (Pol [R 1,R 2,R 1,R 1])
+--Pol [R 2.0,R 7.0,R 10.0]
+
+""
+"multPolmodulo"
+multmodulo (Pol [Z2Z 1,Z2Z 0,Z2Z 0,Z2Z 0,Z2Z 0,Z2Z 0,Z2Z 1]) (Pol [Z2Z 0,Z2Z 0,Z2Z 1]) (Pol [Z2Z 0,Z2Z 0,Z2Z 0,Z2Z 0,Z2Z 0,Z2Z 1])
+--Pol [Z2Z 0,Z2Z 0,Z2Z 1]
+
+""
+"inverseaddmodulo"
+inverseaddmodulo (Pol [Z2Z 1,Z2Z 0,Z2Z 0,Z2Z 0,Z2Z 0,Z2Z 0,Z2Z 1]) (Pol [Z2Z 0,Z2Z 0,Z2Z 0,Z2Z 0,Z2Z 0,Z2Z 1])
+--Pol [Z2Z 1]
+
+
+""
+"euclide"
+algo_euclide_et (Pol [Z2Z 1,Z2Z 0,Z2Z 1]) (Pol [Z2Z 0,Z2Z 1])
+--(Pol [Z2Z 1],Pol [Z2Z 1,Z2Z 0],Pol [Z2Z 0,Z2Z 1,Z2Z 0])

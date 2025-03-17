@@ -1,0 +1,22 @@
+"mult GF28"
+multPolgf28 (Gf (Pol[Z2Z 1,Z2Z 1,Z2Z 1,Z2Z 0,Z2Z 1,Z2Z 0,Z2Z 1])) (Gf (Pol[Z2Z 1,Z2Z 1,Z2Z 0,Z2Z 0,Z2Z 0,Z2Z 0,Z2Z 0,Z2Z 1]))
+--(Pol[Z2Z 1,Z2Z 0,Z2Z 0,Z2Z 0,Z2Z 0,Z2Z 0,Z2Z 1,Z2Z 1])
+
+"addPolgf28"
+addPolgf28 (Gf (Pol[Z2Z 1,Z2Z 1,Z2Z 1,Z2Z 0,Z2Z 1,Z2Z 0,Z2Z 1])) (Gf (Pol[Z2Z 1,Z2Z 1,Z2Z 0,Z2Z 0,Z2Z 0,Z2Z 0,Z2Z 0,Z2Z 1]))
+--Gf (Pol [Z2Z 0,Z2Z 0,Z2Z 1,Z2Z 0,Z2Z 1,Z2Z 0,Z2Z 1,Z2Z 1])
+
+"inverseaddPolgf28"
+inverseaddPolgf28 (Gf (Pol[Z2Z 1,Z2Z 1,Z2Z 1,Z2Z 0,Z2Z 1,Z2Z 0,Z2Z 1])) 
+--Gf (Pol [Z2Z 1,Z2Z 1,Z2Z 1,Z2Z 0,Z2Z 1,Z2Z 0,Z2Z 1])
+
+"is_eqgf"
+is_eqgf (Gf (Pol[Z2Z 1,Z2Z 1,Z2Z 1,Z2Z 0,Z2Z 1,Z2Z 0,Z2Z 1])) (Gf (Pol[Z2Z 1,Z2Z 1,Z2Z 0,Z2Z 0,Z2Z 0,Z2Z 0,Z2Z 0,Z2Z 1]))
+--False
+is_eqgf (Gf (Pol[Z2Z 1,Z2Z 1,Z2Z 1,Z2Z 0,Z2Z 1,Z2Z 0,Z2Z 1])) (Gf (Pol[Z2Z 1,Z2Z 1,Z2Z 1,Z2Z 0,Z2Z 1,Z2Z 0,Z2Z 1]))
+--True
+
+"inversemultPolgf28"
+inversemultPolgf28 (Gf (Pol[Z2Z 1,Z2Z 1,Z2Z 1,Z2Z 0,Z2Z 1,Z2Z 0,Z2Z 1])) 
+--Gf (Pol [Z2Z 1,Z2Z 1,Z2Z 1,Z2Z 1,Z2Z 1,Z2Z 1,Z2Z 0,Z2Z 1])
+

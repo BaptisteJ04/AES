@@ -1,0 +1,2 @@
+bloc_bintohex(cypher bloc_test key)
+bloc_bintohex(inv_cypher inv_bloc_test key)
