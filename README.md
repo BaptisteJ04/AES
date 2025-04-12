@@ -1,49 +1,74 @@
-### JOUBERT Baptiste & ALBINET Julien
 
-# Bilan et explication du projet (Documentation du Binôme 11)
 
-## Les fichiers
+# Implémentation d'AES en Haskell et en C
+## Auteurs
 
-### Groups.hs et Anneau.hs
-Ces fichiers renferment les classes `Groupe` et `Anneau` qui permettent de créer des groupes et des anneaux. Ils nous ont permis de créer mieux comprendre les classe et instance pour pouvoir coder `Corps.hs`, un fichier très utile car toutes nos opérations mathématiques du projet avaient lieu dans des ensembles de  polynomes à coefficient dans des corps.
+    JOUBERT Baptiste 
+    ALBINET Julien
 
-### Corps.hs
-Ce fichier renferme la classe `Corps`, qui nous a servi à définir les opérations et fonctions dans un corps afin de pouvoir utiliser AES.
+## Description du projet
 
-### ZsurNZ.hs
-Ce fichier renferme les types `Z_sur5Z` et `Z_sur_6Z` ainsi que les fonctions d'inverse et d'addition de ces groupes. Ces exemples ont servi plus tard à créer le corps `Z_sur2Z`.
+Ce projet est une implémentation complète de l'algorithme de chiffrement AES (Advanced Encryption Standard) en Haskell et en C. Il permet de chiffrer et déchiffrer des fichiers, notamment des images BMP, en utilisant AES sous différents modes (ECB, CBC).
 
-### Z_sur_2Z.hs
-Comme nous le disions auparavant, ce fichier renferme le corps `Z_sur_2Z` qui nous a servi plus tard à créer des bytes (1 ou 0). Nous l'avons initialisé en corps et non en groupe car, dans notre utilisation pour les polynômes et AES, nous avions besoin que ce soit un corps et non un groupe (le groupe aurait trop limité nos opérations sur ce type). De plus, nous avons initialisé toutes les opérations dans ce corps (addition, multiplication, inverse, égalité).
+L'implémentation en Haskell se concentre sur l'aspect mathématique d'AES, tandis que celle en C est optimisée pour le traitement de fichiers et la performance.
+# Structure du projet
+## Partie Haskell
 
-### Polynome.hs
-Ce fichier renferme toutes les opérations sur les polynômes ainsi que la définition du type `Pol`, qui n'est ni plus ni moins qu'une liste de `a`. Nous avons choisi que le terme de plus petit degré serait en première position de la liste et le terme de plus haut degré en fin (exemple : 2x² + 1 donne [1, 0, 2]).  
-En effet, en regardant comment il fallait coder les fonctions d'opérations sur les polynômes, nous avons trouvé plus simple d'opérer de cette manière. Les polynômes sont donc une instance d'anneau, avec un inverse, une addition et une multiplication. De plus toutes nos foncions et la declaration de l'anneau des polynomes ont une contrainte suplementaire imposant que les coefficients de nos polynomes soit dans des corps. Nous avons imposé cela car tous les polynomes que nous utiliserons par la suite respecterons cette contraintes et comme cela nous pouvons utiliser les fonctions définit sur les corps.
-De plus, ce fichier contient des fonctions comme `take_last` ou `cut_last` qui servent à simplifier certaines fonctions de calcul. Finalement, il reste la fonction `algo_euclide` que nous avons utilisée pour trouver l'inverse modulo pour la multiplication. Toutes ces fonctions de modulo étant les prémices de la création du corps GF(2^8) qui nous servira à encoder des octets pour AES.
+L'implémentation Haskell se trouve dans le dossier Haskell/ et comprend plusieurs fichiers modulaires :
 
-### GF28.hs
-Dans ce fichier, nous avons écrit les fonctions pour le corps GF(2^8). En effet, pour pouvoir représenter un octet, il nous fallait une représentation mathématique afin de pouvoir y effectuer les opérations que nous avions codées précédemment (`Z_sur_2Z` et polynômes).  
-On crée un types plus specifiques car si l'ensembles de polynomesà coefficient dans un corps et un anneau, GF(2^8) est lui un anneau. 
-Nous avons donc choisi de représenter chaque octet par un polynôme de degré inférieur ou égal à 7, afin d'avoir un polynôme à 8 coefficients. Pour représenter chaque byte, nous avons pris les coefficients de ce polynôme dans `Z_sur_2Z`. Nous avons donc un type GF28 qui est un polynôme à coefficients dans `Z_sur_2Z`, nous pouvions donc utiliser nos fonctions mathématiques sur des octets. Il ne nous restait donc plus qu'à faire les fonctions d'AES.
+- AES.hs : Implémentation des transformations AES (SubBytes, ShiftRows, MixColumns, AddRoundKey).
+- Anneau.hs, Corps.hs, Group.hs : Définition des structures mathématiques utilisées (groupes, anneaux, corps).
+- Polynome.hs : Gestion des polynômes pour représenter les opérations de Galois Field GF(2⁸).
+- GF28.hs : Implémentation du corps fini GF(2⁸), utilisé dans AES.
+- Cypher.hs : Contient les fonctions de chiffrement et déchiffrement AES.
+- Fichiers de test (test_AES.ghci, test_Cypher.ghci, etc.) : Scripts pour tester l'implémentation.
 
-### AES.hs
-Ce fichier contient la définition des colonnes. En effet, nous avons décidé de représenter les colonnes des blocs par des polynômes afin de pouvoir utiliser nos fonctions sur les colonnes.  
-Les blocs sont eux des listes de colonnes.  
+## Partie C
 
-    -Pour `SubBytes`, nous l'avons implémentée en utilisant la multiplication par le polynôme donné dans le PDF sur AES. 
-    -Pour `ShiftRows`, nous avons simplement déplacé les éléments de notre bloc. 
-    -Pour `MixColumns`, nous avons codé une première version en utilisant le produit de matrice. Cependant, après le retour de M. Guisse, nous avons amélioré cette fonction en remplaçant le produit matriciel par un produit de polynômes. 
-    -Pour `AddRoundKey`, c'est une addition de polynômes. 
-    -Pour `KeySchedule`, nous avons plusieurs versions, qui permettent de s'adapter aux différents cas (128, 192 ou 256). Nous avons préféré faire trois fonctions distinctes plutôt qu'une modulable pour la facilité de code que cela impliquait.  
+L'implémentation en C se trouve dans le dossier C/ et comprend plusieurs fichiers :
 
-Ce fichier contient aussi toutes les fonctions inverse.
+- F_AES.c / F_AES.h : Fonctions principales d'AES + Fonctions utilitaires.
+- F_Inverse_AES.c / F_Inverse_AES.h : Fonctions de déchiffrement AES.
+- cbc_encryption.c / cbc_encryption.h : Implémentation d'AES en mode CBC.
+- ecb_encryption.c / ecb_encryption.h : Implémentation d'AES en mode ECB.
+- bmp.c / bmp.h : Gestion des fichiers BMP (lecture, écriture).
+- Table_de_multiplication.c : Table de multiplication pour GF(2⁸).
+- tests_AES.c : Programme de test de l'implémentation AES en C.
+- Makefile : Automatisation de la compilation du projet.
 
-Finalement, nous avons décidé de rajouter des fonctions `hextobin` et `binthex` afin de simplifier la lecture des blocs lors des tests ainsi que l'écriture des tests.
+### Fonctionnalités
 
-### Cypher.hs
-Ce fichier contient les deux fonctions finales, permettant d'encoder et de décoder avec AES. Ces deux fonctions utilisent les fonctions d'AES, qui elles-mêmes regroupent toutes les fonctions et classes contenues dans tous nos autres fichiers.
+- Chiffrement/Déchiffrement AES (128, 192, 256 bits).
+- Modes ECB et CBC pour le chiffrement.
+- Support des fichiers BMP (pour observer visuellement l'effet du chiffrement).
+- Tests unitaires en Haskell et en C.
 
-## Conclusion et retour sur la première partie du projet
-Lors de cette partie en Haskell, nous avons rencontré plusieurs problèmes, tout d'abord sur l'organisation. Malgré l'effort que nous avions mis dès le début, il nous est arrivé de faire la même chose chacun de notre côté, ou bien d'avoir une mauvaise estimation du travail pour la séance d'après (notamment entre les séances 3 et 4).  
-De plus, il nous est arrivé de ne pas assez communiquer sur nos avancements, ou de ne pas remplir le carnet de bord pour que l'autre sache ce qui avait été fait.  
-Cependant, au fil des séances, nous nous sommes améliorés sur ces points et nous espérons pouvoir être efficaces dans la dernière ligne droite du projet dans trois semaines.
+## Compilation et Exécution
+### Partie Haskell
+
+Assurez-vous d'avoir GHC (Glasgow Haskell Compiler) installé. Pour tester l'implémentation Haskell :
+'''bash
+    ghci test_AES.ghci
+'''
+### Partie C
+
+Pour compiler et exécuter le programme en C, utilisez Makefile :
+
+'''bash
+cd C
+make
+./tests_AES
+'''
+
+## Résultats et Analyse
+
+L'implémentation a été testée sur des fichiers BMP, ce qui permet d'observer directement l'effet du chiffrement AES. En mode ECB, des motifs visuels restent visibles, tandis qu'en mode CBC, l'image est complètement brouillée, ce qui montre l'efficacité du mode CBC contre les attaques par motifs répétitifs.
+### Améliorations possibles
+
+- Optimisation des performances en C avec SIMD.
+- Implémentation d'autres modes comme CTR ou GCM.
+- Interface utilisateur pour simplifier l'utilisation.
+
+# Conclusion
+
+Ce projet a permis d'approfondir la compréhension d'AES et des mathématiques sous-jacentes, en comparant une approche fonctionnelle en Haskell et une approche impérative en C.
