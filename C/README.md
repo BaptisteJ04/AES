@@ -77,8 +77,8 @@ Le fichier **F_inverse_AES.c** contient l'implémentation des différentes fonct
 
 ---
 
+## Conclusion et retour sur la partie en langage C du projet
 
-## Conclusion et retour sur la deuxième partie du projet
-Lors de cette partie en Haskell, nous avons rencontré plusieurs problèmes, tout d'abord sur l'organisation. Malgré l'effort que nous avions mis dès le début, il nous est arrivé de faire la même chose chacun de notre côté, ou bien d'avoir une mauvaise estimation du travail pour la séance d'après (notamment entre les séances 3 et 4).  
-De plus, il nous est arrivé de ne pas assez communiquer sur nos avancements, ou de ne pas remplir le carnet de bord pour que l'autre sache ce qui avait été fait.  
-Cependant, au fil des séances, nous nous sommes améliorés sur ces points et nous espérons pouvoir être efficaces dans la dernière ligne droite du projet dans trois semaines.
+Durant cette partie du projet en langage C, la gestion du travail en groupe a été bien meilleure. Nous ayons structuré notre travail dès le départ, nous avons codé nos fonctionnalités chacun de notre côté mais en restant en communication quasi permanante.
+Cependant, nous n'avons pas toujours tenu à jour le carnet de bord, ce qui a parfois créé de la confusion sur l'état d'avancement car nous avons aussi pour certaines taches sous-estimer le temps nécessaire pour les réaliser.
+Néanmoins, nous avons appris des erreurs de la partie Haskell et avons amélioré notre coordination. Ce projet nous a permis de bien mettre en place l'esprit projet et nous a entrainé à travailler en équipe.
