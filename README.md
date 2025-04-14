@@ -47,18 +47,18 @@ L'implémentation en C se trouve dans le dossier C/ et comprend plusieurs fichie
 ### Partie Haskell
 
 Assurez-vous d'avoir GHC (Glasgow Haskell Compiler) installé. Pour tester l'implémentation Haskell :
-'''bash
+```bash
     ghci test_AES.ghci
-'''
+```
 ### Partie C
 
 Pour compiler et exécuter le programme en C, utilisez Makefile :
 
-'''bash
+```bash
 cd C
 make
 ./tests_AES
-'''
+```
 
 ## Résultats et Analyse
 
