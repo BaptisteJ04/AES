@@ -1,5 +1,13 @@
 all: aes_test
 
+.PHONY: all clean test demo
+
+test: aes_test
+	./aes_test
+
+demo: test_ecb
+	./test_ecb
+
 aes_test: F_AES.o tests_AES.o F_Inverse_AES.o Table_de_multiplication.o cic.o
 	gcc F_AES.o tests_AES.o F_Inverse_AES.o Table_de_multiplication.o cic.o -o aes_test
 
@@ -41,4 +49,4 @@ main_generation.o: ./generation_Table/main_generation.c
 	gcc -Wall -Wextra -c ./generation_Table/main_generation.c -o main_generation.o
 
 clean:
-	rm -f *.o aes_test Table cic
+	rm -f *.o aes_test test_ecb Table cic

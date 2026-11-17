@@ -1,74 +1,96 @@
+# AES in Haskell and C
 
+**Authors:** Baptiste Joubert, Julien Albinet
 
-# Implémentation d'AES en Haskell et en C
-## Auteurs
+> **Disclaimer:** this is an educational project written for a university course. It is **not** hardened against side-channel attacks, has not been audited, and must **not** be used to protect real data. Use a vetted library (OpenSSL, libsodium, ...) in production.
 
-    JOUBERT Baptiste 
-    ALBINET Julien
+## Overview
 
-## Description du projet
+A from-scratch implementation of the AES (Advanced Encryption Standard) block cipher, written twice:
 
-Ce projet est une implémentation complète de l'algorithme de chiffrement AES (Advanced Encryption Standard) en Haskell et en C. Il permet de chiffrer et déchiffrer des fichiers, notamment des images BMP, en utilisant AES sous différents modes (ECB, CBC).
+- **Haskell**: focuses on the mathematics behind AES. Groups, rings and fields are built from scratch (Z/2Z, polynomial rings, GF(2⁸)), and the cipher is then expressed on top of them.
+- **C**: an imperative implementation with lookup tables, plus ECB and CBC modes applied to BMP images.
 
-L'implémentation en Haskell se concentre sur l'aspect mathématique d'AES, tandis que celle en C est optimisée pour le traitement de fichiers et la performance.
-# Structure du projet
-## Partie Haskell
+Both follow [FIPS 197](https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.197.pdf).
 
-L'implémentation Haskell se trouve dans le dossier Haskell/ et comprend plusieurs fichiers modulaires :
+## Correctness
 
-- AES.hs : Implémentation des transformations AES (SubBytes, ShiftRows, MixColumns, AddRoundKey).
-- Anneau.hs, Corps.hs, Group.hs : Définition des structures mathématiques utilisées (groupes, anneaux, corps).
-- Polynome.hs : Gestion des polynômes pour représenter les opérations de Galois Field GF(2⁸).
-- GF28.hs : Implémentation du corps fini GF(2⁸), utilisé dans AES.
-- Cypher.hs : Contient les fonctions de chiffrement et déchiffrement AES.
-- Fichiers de test (test_AES.ghci, test_Cypher.ghci, etc.) : Scripts pour tester l'implémentation.
+- The C test suite checks each round transformation (SubBytes, ShiftRows, MixColumns, AddRoundKey and their inverses) and runs full encrypt/decrypt round trips on the **FIPS 197 Appendix C vectors for 128-, 192- and 256-bit keys**.
+- The Haskell version is checked against the FIPS 197 Appendix B example (`3925841d02dc09fbdc118597196a0b32`).
 
-## Partie C
+## ECB vs CBC on an image
 
-L'implémentation en C se trouve dans le dossier C/ et comprend plusieurs fichiers :
+Original, ECB-encrypted, CBC-encrypted (left to right):
 
-- F_AES.c / F_AES.h : Fonctions principales d'AES + Fonctions utilitaires.
-- F_Inverse_AES.c / F_Inverse_AES.h : Fonctions de déchiffrement AES.
-- cbc_encryption.c / cbc_encryption.h : Implémentation d'AES en mode CBC.
-- ecb_encryption.c / ecb_encryption.h : Implémentation d'AES en mode ECB.
-- bmp.c / bmp.h : Gestion des fichiers BMP (lecture, écriture).
-- Table_de_multiplication.c : Table de multiplication pour GF(2⁸).
-- tests_AES.c : Programme de test de l'implémentation AES en C.
-- Makefile : Automatisation de la compilation du projet.
+![Tux: original, ECB, CBC](docs/tux_comparison.png)
 
-### Fonctionnalités
+In ECB mode, identical plaintext blocks give identical ciphertext blocks, so the outline of the image is still visible. CBC chains the blocks and removes this pattern.
 
-- Chiffrement/Déchiffrement AES (128, 192, 256 bits).
-- Modes ECB et CBC pour le chiffrement.
-- Support des fichiers BMP (pour observer visuellement l'effet du chiffrement).
-- Tests unitaires en Haskell et en C.
+## Features
 
-## Compilation et Exécution
-### Partie Haskell
+- AES-128, AES-192 and AES-256 (encryption and decryption)
+- ECB and CBC modes
+- BMP image reading/writing to visualise the effect of the modes
+- Test programs in C and GHCi scripts in Haskell
 
-Assurez-vous d'avoir GHC (Glasgow Haskell Compiler) installé. Pour tester l'implémentation Haskell :
-```bash
-    ghci test_AES.ghci
+## Project structure
+
 ```
-### Partie C
+C/            C implementation (see C/README.md)
+Haskell/      Haskell implementation (see Haskell/README.md)
+docs/         Images used in this README
+```
 
-Pour compiler et exécuter le programme en C, utilisez Makefile :
+### C (`C/`)
+
+| File | Role |
+|---|---|
+| `F_AES.c/.h` | Core AES transformations and helpers, key expansion |
+| `F_Inverse_AES.c/.h` | Inverse transformations (decryption) |
+| `Cypher_InvCypher.c/.h` | Block encryption / decryption (`aes_encrypt`, `aes_decrypt`) |
+| `ecb_encryption.c/.h`, `cbc_encryption.c/.h` | ECB and CBC modes |
+| `bmp.c/.h` | BMP reading/writing, and the image demo `main` |
+| `Table_de_multiplication.c/.h` | Precomputed GF(2⁸) multiplication tables |
+| `generation_Table/` | Generator for those tables |
+| `tests_AES.c` | Test program |
+
+### Haskell (`Haskell/`)
+
+`Group.hs`, `Anneau.hs`, `Corps.hs` (algebraic structures) → `Z_sur_2Z.hs`, `Polynome.hs`, `GF28.hs` (field arithmetic) → `AES.hs`, `Cypher.hs` (the cipher). `test_*.ghci` are test scripts.
+
+## Build and run
+
+### C
+
+Requires `gcc` and `make`.
 
 ```bash
 cd C
-make
-./tests_AES
+make test        # builds and runs the test suite (./aes_test)
+make demo        # builds and runs the ECB/CBC image demo (./test_ecb)
+make clean
 ```
 
-## Résultats et Analyse
+`make demo` encrypts `Tux.bmp` in ECB (`Tux_encrypte.bmp`) and CBC (`Tux_encrypte2.bmp`), then decrypts both back (`Tux_decrypte*.bmp`). Run it from inside `C/`.
 
-L'implémentation a été testée sur des fichiers BMP, ce qui permet d'observer directement l'effet du chiffrement AES. En mode ECB, des motifs visuels restent visibles, tandis qu'en mode CBC, l'image est complètement brouillée, ce qui montre l'efficacité du mode CBC contre les attaques par motifs répétitifs.
-### Améliorations possibles
+### Haskell
 
-- Optimisation des performances en C avec SIMD.
-- Implémentation d'autres modes comme CTR ou GCM.
-- Interface utilisateur pour simplifier l'utilisation.
+Requires GHC.
 
-# Conclusion
+```bash
+cd Haskell
+ghci Cypher.hs
+ghci> :script test_Cypher.ghci
+```
 
-Ce projet a permis d'approfondir la compréhension d'AES et des mathématiques sous-jacentes, en comparant une approche fonctionnelle en Haskell et une approche impérative en C.
+The other scripts work the same way (`test_AES.ghci` with `AES.hs`, `test_Gf28.ghci` with `GF28.hs`, ...).
+
+## Possible improvements
+
+- SIMD / AES-NI optimisation of the C version
+- More modes (CTR, GCM)
+- A proper command-line interface (key, IV and file as arguments)
+
+## License
+
+MIT, see [LICENSE](LICENSE).

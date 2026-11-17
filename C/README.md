@@ -1,84 +1,88 @@
-### JOUBERT Baptiste & ALBINET Julien
+# C implementation: files and functions
 
-# Bilan et explication du projet (Documentation du Binôme 11)
+**Authors:** Baptiste Joubert, Julien Albinet
 
-## Les fichiers
+Educational code, not for protecting real data. See the [root README](../README.md) for build instructions.
 
-### F_AES.c - Fonctions AES
+## Files
 
-Le fichier **F_AES.c** contient l'implémentation des différentes fonctions utilisées dans l'algorithme de chiffrement AES. Voici une description des fonctions principales et de leur rôle dans le processus de chiffrement/déchiffrement.
+### F_AES.c: AES functions
 
-#### Variables Globales
-Le fichier définit plusieurs matrices et blocs utilisés dans le processus AES :
+Implements the AES building blocks.
 
-- `mat_mix[4][4]` : La matrice de mélange utilisée pour l'opération **MixColumns**.
-- `bloc_initial[4][4]` : Le bloc de texte brut initial à chiffrer.
-- `bloc_test[4][4]` : Un bloc de test servant à vérifier le bon fonctionnement des opérations.
-- `bloc_add_round_key[4][4]` : Le bloc après l'ajout de la clé de ronde.
-- `bloc_apres_add_round_key[4][4]` : Le bloc après l'opération **AddRoundKey**.
-- `bloc_apres_sub_bytes[4][4]` : Le bloc après l'opération **SubBytes**.
-- `bloc_apres_shift_rows[4][4]` : Le bloc après l'opération **ShiftRows**.
-- `bloc_apres_mix_columns[4][4]` : Le bloc après l'opération **MixColumns**.
+#### Global variables
+Several matrices and blocks used for the tests and the AES process:
 
-#### Fonctions Utilitaires
-Ces fonctions sont utilisées pour manipuler les blocs de données et effectuer des opérations de bas niveau :
+- `mat_mix[4][4]`: the matrix used by **MixColumns**.
+- `bloc_initial[4][4]`: the initial plaintext block.
+- `bloc_test[4][4]`: a test block used to check the operations.
+- `bloc_add_round_key[4][4]`, `bloc_apres_add_round_key[4][4]`: the block before/after **AddRoundKey**.
+- `bloc_apres_sub_bytes[4][4]`: the block after **SubBytes**.
+- `bloc_apres_shift_rows[4][4]`: the block after **ShiftRows**.
+- `bloc_apres_mix_columns[4][4]`: the block after **MixColumns**.
 
-- **egalite_bloc** : Vérifie l'égalité entre deux blocs de 4x4 octets.
-- **egalite_tableau** : Vérifie l'égalité entre deux tableaux de 4 éléments.
-- **rotmat** : Effectue une rotation de 90 degrés de la matrice de 4x4 octets.
-- **copieb** : Copie un tableau 2D de blocs dans un autre.
-- **copiec** : Copie une colonne de 4 octets d'un tableau dans une autre.
-- **xor** : Effectue une opération XOR entre deux colonnes de 4 octets.
-- **crea_tab** : Crée un tableau de blocs à partir d'une phrase (utile pour l'initialisation des blocs).
-- **print_bloc** : Affiche un bloc 4x4 dans la console.
-- **print_tableau** : Affiche un tableau de 4 éléments dans la console.
-- **rotword** : Effectue une rotation de mot sur une colonne, utilisée dans l'expansion de clé.
+#### Utility functions
 
-#### Opérations AES
+- **egalite_bloc**: checks whether two 4x4 byte blocks are equal.
+- **egalite_tableau**: checks whether two 4-element arrays are equal.
+- **rotmat**: rotates a 4x4 byte matrix by 90 degrees.
+- **copieb**: copies a 2D block into another.
+- **copiec**: copies a 4-byte column into another.
+- **xor**: XOR of two 4-byte columns.
+- **crea_tab**: builds a block array from a hex string (used to initialise blocks).
+- **print_bloc**: prints a 4x4 block to the console.
+- **print_tableau**: prints a 4-element array to the console.
+- **rotword**: rotates a word (column), used in key expansion.
+
+#### AES operations
 
 1. **SubBytes**
-   - **subbytes** : Applique l'opération **SubBytes** sur un bloc de 4x4 octets, où chaque octet est remplacé par son équivalent dans la table S-Box.
-   - **subbytesCol** : Applique **SubBytes** sur une colonne de 4 octets.
-
+   - **subbytes**: replaces each byte of a 4x4 block with its S-Box value.
+   - **subbytesCol**: applies **SubBytes** to one column.
 2. **AddRoundKey**
-   - **Add_RK** : Effectue l'addition (XOR) du bloc de données avec une clé de ronde spécifique.
-
+   - **Add_RK**: XORs the block with a given round key.
 3. **ShiftRows**
-   - **decalageg** : Effectue un décalage d'une ligne du bloc de texte de `num_dec` positions.
-   - **shift_rows** : Applique l'opération **ShiftRows** sur un bloc de 4x4 octets en décalant les lignes du bloc selon les règles de l'algorithme AES.
-
+   - **decalageg**: shifts one row of the block by `num_dec` positions.
+   - **shift_rows**: applies **ShiftRows** to a 4x4 block following the AES rules.
 4. **MixColumns**
-   - **mult_mix_gf** : Effectue une multiplication dans le corps GF(2^8), utilisée pour l'opération **MixColumns**.
-   - **mix_columns** : Applique l'opération **MixColumns** sur un bloc de 4x4 octets en multipliant chaque colonne par une matrice de mixage.
-
-5. **Expansion de Clé**
-   - **decoupe192** : Découpe la clé de 192 bits en plusieurs parties nécessaires pour l'expansion de clé.
-   - **decoupe256** : Découpe la clé de 256 bits en plusieurs parties nécessaires pour l'expansion de clé.
-   - **list_key_to_word** : Convertit une liste de clés en un tableau de mots de 4 octets pour l'expansion de clé.
-   - **KeyExp** : Effectue l'expansion de clé pour générer toutes les clés de ronde à partir de la clé initiale.
-   - **extrat_key** : Extrait une clé de ronde à partir de l'expansion de clé pour un tour donné.
-
----
-  
-### F_inverse_AES.c - Fonctions AES Inverses
-
-Le fichier **F_inverse_AES.c** contient l'implémentation des différentes fonctions inverses utilisées dans l'algorithme AES pour le déchiffrement. Voici une description des fonctions principales et de leur rôle dans le processus de déchiffrement.
-
-#### 1. **Inverse_Sub_bytes**
-- **Inverse_Sub_bytes** : Cette fonction applique l'opération **Inverse SubBytes** sur un bloc de 4x4 octets, où chaque octet du bloc est remplacé par son équivalent dans la table S-Box inverse, utilisée dans le processus de déchiffrement d'AES.
-
-#### 2. **Inverse_Shift_rows**
-- **decalaged** : Effectue un décalage d'une ligne de 4 octets d'un bloc dans le sens inverse de l'opération **ShiftRows**, en fonction du nombre de décalages spécifié (`num_dec`).
-- **Inverse_Shift_rows** : Applique l'opération **Inverse ShiftRows** sur un bloc de 4x4 octets en réarrangeant les lignes du bloc selon l'inverse des règles de l'algorithme AES de chiffrement.
-
-#### 3. **Inverse_Mix_Colonne**
-- **mult_inverse_mix_gf** : Effectue une multiplication de deux éléments dans le corps GF(2^8) utilisée pour l'opération inverse de multiplication dans **Inverse MixColumns**.
-- **Inverse_Mix_Colonne** : Applique l'opération **Inverse MixColumns** sur un bloc de 4x4 octets en multipliant chaque colonne du bloc par une matrice inverse de mixage. Cela permet de récupérer l'information après l'opération **MixColumns** réalisée lors du chiffrement.
+   - **mult_mix_gf**: multiplication in GF(2⁸), used by **MixColumns**.
+   - **mix_columns**: applies **MixColumns** by multiplying each column by the mixing matrix.
+5. **Key expansion**
+   - **decoupe192**, **decoupe256**: split a 192/256-bit key schedule into the parts needed for round keys.
+   - **list_key_to_word**: converts a list of keys into an array of 4-byte words.
+   - **KeyExp**: expands the initial key into all round keys.
+   - **extrat_key**: extracts the round key for a given round.
 
 ---
 
-## Conclusion et retour sur la partie en langage C du projet
+### F_Inverse_AES.c: inverse AES functions
 
-Durant cette partie du projet en langage C, la gestion du travail en groupe a été bien meilleure. Nous ayons structuré notre travail dès le départ, nous avons codé nos fonctionnalités chacun de notre côté mais en restant en communication quasi permanante.
-Cependant, nous n'avons pas toujours tenu à jour le carnet de bord, ce qui a parfois créé de la confusion sur l'état d'avancement car nous avons aussi pour certaines taches sous-estimer le temps nécessaire pour les réaliser.
-Néanmoins, nous avons appris des erreurs de la partie Haskell et avons amélioré notre coordination. Ce projet nous a permis de bien mettre en place l'esprit projet et nous a entrainé à travailler en équipe.
+Implements the inverse operations used for decryption.
+
+- **Inverse_Sub_bytes**: replaces each byte of a 4x4 block with its inverse S-Box value.
+- **decaled**: shifts a row in the opposite direction of **ShiftRows**.
+- **Inverse_Shift_rows**: applies **Inverse ShiftRows** to a 4x4 block.
+- **mult_inverse_mix_gf**: GF(2⁸) multiplication used by **Inverse MixColumns**.
+- **Inverse_Mix_Colonne**: applies **Inverse MixColumns** with the inverse mixing matrix.
+
+### Cypher_InvCypher.c
+
+`aes_encrypt` and `aes_decrypt` encrypt/decrypt one 128-bit block with a 128-, 192- or 256-bit key (given as a key length of 4, 6 or 8 words).
+
+### ecb_encryption.c / cbc_encryption.c
+
+ECB and CBC modes (`aes_ecb_encrypt`, `aes_cbc_encrypt`, and the matching decrypt functions) working on byte buffers.
+
+### bmp.c
+
+BMP reading/writing. Its `main` is the image demo: it encrypts and decrypts `Tux.bmp` in ECB and CBC mode (`make demo`).
+
+### tests_AES.c
+
+Test program (`make test`): unit tests of each transformation, plus full encrypt/decrypt tests on the FIPS 197 Appendix C vectors for 128-, 192- and 256-bit keys.
+
+---
+
+## Retrospective
+
+Teamwork was much better on the C part. We structured the work from the start and coded our features separately while staying in almost constant contact. However, we did not always keep our logbook up to date, which sometimes caused confusion about progress, and we underestimated the time some tasks would take. Still, we learned from the mistakes of the Haskell part and improved our coordination.

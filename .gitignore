@@ -1,0 +1,13 @@
+# Build artifacts
+*.o
+C/aes_test
+C/test_ecb
+C/Table
+C/cic
+*.hi
+
+# Editor config
+.vscode/
+
+# Personal course logbook (kept locally, not published)
+Carnet_de_Bord.md
